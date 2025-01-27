@@ -1,84 +1,52 @@
-# ENM-Protein Corona Predictor
-
-## Overview
-The ENM-Protein Corona Predictor is a Python-based project designed to predict interactions between engineered nanomaterials (ENMs) and proteins. This tool leverages machine learning techniques to provide insights into protein corona formation, helping researchers understand key factors that govern these interactions. The project includes data preprocessing, model training, validation, and result visualization, making it a comprehensive solution for ENM-protein studies.
-
-## Features
-1. **Data Handling**:
-   - Input data includes a database of ENM-protein interaction characteristics.
-   - Supports custom datasets for predictions.
-2. **Pipeline Execution**:
-   - Automatically trains and tests a random forest classifier.
-   - Allows recursive feature elimination (RFECV) and hyperparameter optimization.
-3. **Performance Metrics**:
-   - Generates validation metrics such as AUROC, recall, precision, and accuracy.
-   - Outputs feature importance for better interpretability.
-4. **Visualization**:
-   - Includes ROC curve and Youden index visualizations.
-   - Exports results in JSON and Excel formats for detailed analysis.
-5. **Scalability**:
-   - Allows multiple runs of the model to ensure robust predictions.
-
-## Technologies Used
-- **Programming Language**: Python
-- **Libraries and Tools**:
-  - Machine Learning: scikit-learn
-  - Data Processing: NumPy, pandas
-  - Visualization: Matplotlib
-  - File Handling: JSON
-
-## Code Highlights
-The main components of the project include:
-1. **Pipeline Functionality**:
-   - `pipeline()`: Core function to train, evaluate, and validate the model.
-2. **Classes and Utilities**:
-   - `RandomForestClassifierWithCoef`: Custom random forest classifier with coefficient extraction.
-   - `NpEncoder`: Handles JSON serialization for NumPy data types.
-   - `data_utils`: Manages data preprocessing and feature selection.
-3. **Validation Tools**:
-   - `validation_utils`: Provides detailed validation metrics and performance tests.
-   - `validator.y_randomization_test`: Ensures model reliability.
-
-## Installation and Setup
-1. Clone or download the repository.
-2. Ensure Python (3.7 or later) is installed along with required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Set the input database path in the `db.raw_data` attribute within the script.
-4. Run the main script with the following arguments:
-   ```bash
-   python <script_name>.py <number_of_iterations> <output_file>
-   ```
-
-## How to Use
-1. Prepare your input database file in `.csv` format.
-2. Configure the script to use your custom dataset by setting `db.predict` to your file path.
-3. Execute the script with desired iterations and output file name.
-4. Review the results in the generated JSON and Excel files.
-
-## Project Structure
-- **Core Files**:
-  - `data_utils.py`: Handles data preprocessing and splitting.
-  - `predictor_utils.py`: Implements model training and optimization.
-  - `validation_utils.py`: Provides metrics and validation methods.
-  - `visualization_utils.py`: Generates visual insights.
-  - `statistic_parser.py`: Converts JSON results into human-readable format.
-- **Input Files**:
-  - `database.csv`: Input dataset for model training and testing.
-  - `_mask.txt`: RFECV mask file.
-- **Output Files**:
-  - JSON: Stores metrics and feature importances.
-  - Excel: Contains classification information.
-
-## Future Enhancements
-1. Expand the model to support additional machine learning algorithms.
-2. Implement a user-friendly GUI for non-technical users.
-3. Add more detailed data visualization options.
-4. Include automated hyperparameter tuning.
-
-## License
-This project is for educational and research purposes only. Redistribution and commercial use are not permitted without explicit permission.
-
-## Contact
-For questions or contributions, contact [MURALI SAI V] at [mv8039@srmist.edu.in].
+<h1> This Script Predicts Interactions between engineered nanomaterials and proteins under relevant biological conditions </h1>
+<p> This is funded undergraduate research from the Dr. Wheeler lab at Santa Clara University </p>
+<p> Written by Matthew Findlay 2017 <p>
+<p> Fork me and feel free to contribute your research <p>
+<h2> Implementation </h2>
+<p> This script uses a random forest classifier to make predictions. Several different machine learning algorithms and ensembles were used but we ultimately decided to stick with random forests due to their human readability <p>
+<h2> Data </h2>
+The experiments were setup by Danny Freitas (undergraduate bioengineering). Danny reacts nanomaterials and extracted proteins, and sends his samples to stanford where LC/MS/MS is used
+To produce the spectral counts of proteins on the surface of engineered nanoparticles (bound), and proteins not on the surface of particles (unbound). Data was
+mined from online databases to find the length of the proteins. The spectral counts were divided by the length of the proteins,
+normalized, and a ratio was created giving a NSAF value representing the enrichment of specific proteins onto the surface of nanomaterials.
+With this enrichment factor, databases were mined for protein characteristics, and this information was used to predict if a given protein
+and nanomaterial pair will bind
+<h2> How to use </h2>
+<p>To run the pipeline and reproduce the results call estimator.py "amount of runs" "output file" (2 command line arguments). This
+will output the statistics and feature importances to the "output file" in JSON format. This will also
+output all the classification information to a csv file. To see the statistics and feature importances
+in a readable format call statistic_parser.py "output_file" and the results will be printed to the
+command line.</p>
+<h2> Predicting your own data</h2>
+<p> To make predictions of your own data go to the main function in estimator.py. Set db.predict = "your_csv_path". This will use our data to make predictions on yours. A csv file will be outputted
+with easily interpretable results. Be weary of predictions that fall within the 0.4-0.6 probability range
+as these are considered unreliable </p>
+<h2> python files </h2>
+<h3> estimator.py </h3>
+<p> contains main(). Runs the estimator and includes lines to run recursive feature elimination
+or grid search.</p>
+<h3> predictor_utils.py </h3>
+<p>contains tools to build and optimize the estimator.</p>
+<h3> visualization_tools.py </h3>
+<p>Contains some fun functions to help us visualize the ENM data </p>
+<h3> validator.py </h3>
+<p> Contains functions and classes that make it easy to validate the model performance </p>
+<h3>statistic_parser.py</h3>
+<p> parses the model JSON output and prints it in readable format to the command line </p>
+<h2> Input Files </h2>
+<h3>database.csv</h3>
+<p> contains the database </p>
+<h3>mask.txt</h3>
+<p> a boolean mask produced by recursive feature elimination and cross validation.
+This mask is applied to the database to produce an optimal amount of features </p>
+<h2> Output Files </h2>
+<h3> final.json </h3>
+<p>non stratified results from running the model 50x</p>
+<h3>stratified_final.json</h3>
+<p>stratified results from running the model 50x</p>
+<h3>prediction_probability.csv</h3>
+<p>contains an excel file with information about predictions</p>
+<h3>stratified_prediction_probability.csv</h3>
+<p>contains an excel file with information about stratified predictions</p>
+<h3> y_randomization.csv</h3>
+<p>results from the y_randomization_test</p>
